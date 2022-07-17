@@ -460,6 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caa7a730ac0de2743a35d5639560174a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentDrop: {fileID: 5344358507589252107}
   drop1: {fileID: 1546634944968844657, guid: e199addd041c64d4a9e224e8a7f7f68f, type: 3}
   drop2: {fileID: 1546634944968844657, guid: e199addd041c64d4a9e224e8a7f7f68f, type: 3}
   drop3: {fileID: 1873906758176521935, guid: e1abc10d475cd494eb083dc60de30062, type: 3}

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ColliderDisabler : MonoBehaviour
 {
+    public GameObject currentDrop;
+
     public GameObject drop1;
     public GameObject drop2;
     public GameObject drop3;
@@ -16,6 +18,7 @@ public class ColliderDisabler : MonoBehaviour
     public GameObject drop10;
 
     private float dropNumber;
+    private BoxCollider boxCollider;
 
     public Transform dropSpawner;
 
@@ -24,6 +27,7 @@ public class ColliderDisabler : MonoBehaviour
     private void Start()
     {
         dropNumber = Random.Range(0, 10);
+        boxCollider = GetComponent<BoxCollider>();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -78,7 +82,7 @@ public class ColliderDisabler : MonoBehaviour
             {
                 Instantiate(drop10, dropSpawner);
             }
-            Destroy(gameObject);
+            boxCollider.enabled = false;
         }
     }
 }
