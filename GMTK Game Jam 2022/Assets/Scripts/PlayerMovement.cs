@@ -6,19 +6,19 @@ public class PlayerMovement : MonoBehaviour
 {
     public float runSpeed;
     public float jumpHeight;
-    public float fallMultiplier;
+    //public float fallMultiplier;
+    public float minFallSpeed;
 
     private float movement;
 
-    public GameObject bullet;
-    public Transform firePoint;
-    public float fireRate = 2f;
-    float nextFireTime = 0f;
-
     private Rigidbody rb;
 
-    bool isJumping;
+    public bool isJumping;
     bool facingRight;
+
+    public GameManager gameManager;
+
+    //public Animator ladderAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -33,32 +33,40 @@ public class PlayerMovement : MonoBehaviour
 
         rb.velocity = new Vector3(runSpeed * movement, rb.velocity.y, 0);
 
-        //if (Input.GetButton("Fire1"))
-        {
-            //if (Time.time >= nextFireTime)
-            {
-                //Instantiate(bullet, firePoint.position, firePoint.rotation);
-                //nextFireTime = Time.time + 1f / fireRate;
-            }
-        }
-
         if (Input.GetButtonDown("Jump") && isJumping == false)
         {
             rb.AddForce(new Vector3(rb.velocity.x, jumpHeight, 0));
         }
 
-        if (rb.velocity.y < 5)
+        if (rb.velocity.y < minFallSpeed)
         {
-            rb.velocity += Vector3.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            rb.velocity = new Vector3(rb.velocity.x, minFallSpeed, rb.velocity.z);
         }
 
-        if (movement > 0 && !facingRight)
+        //if (rb.velocity.y < 0)
         {
-            Flip();
+            //rb.velocity += Vector3.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
-        else if (movement < 0 && facingRight)
+
+        //if (movement > 0 && !facingRight)
         {
-            Flip();
+            //Flip();
+        }
+        //else if (movement < 0 && facingRight)
+        {
+            //Flip();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            gameManager.GameOver();
+            rb.useGravity = false;
+            rb.mass = 0f;
+            rb.velocity = new Vector3(0, 0, 0);
+            Destroy(gameObject);
         }
     }
 
@@ -67,7 +75,11 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             isJumping = false;
-        }
+            if (ScoreText.score != 0)
+            {
+                //ladderAnimator.SetBool("Ladderdown", true);
+            }
+        } 
     }
 
     private void OnCollisionExit(Collision other)
@@ -75,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             isJumping = true;
+            //ladderAnimator.SetBool("Ladderdown", false);
         }
     }
 
